@@ -7,12 +7,16 @@ import { AiFillHome } from "react-icons/ai";
 
 export default function Lesson() {
   const [isVisible, setIsVisible] = useState(false);
+
   let navigate = useNavigate();
-  
   const goToCourseScreen = () => {
     navigate("/");
   };
 
+  const displayVideo = () => {
+    window.open('https://photos.google.com/share/AF1QipPGtp7gLHmZY8O2JkSfosjMttVzoKX0C1hXcJpg7xc8GEsvQcM9_83jQpD-OSEs4w/photo/AF1QipNRJ7Iuecr7XlNwSoudG74JLBxN_b0oqaXmv-9t?key=TFB0VVBuVkh2ak9ybXdCUWlfOGU0MFhTVVZscWRn', '_blank');
+  }
+  
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{'Course Name'}</Text>
@@ -20,6 +24,7 @@ export default function Lesson() {
         onClick={goToCourseScreen}
         style={{fontSize: 25, color: '#547618', position: 'absolute', paddingTop: 28, paddingLeft: 10}}
       />
+      
       <View>
         <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
           <Text style={styles.lessonName}>Lesson 1</Text>
@@ -28,7 +33,8 @@ export default function Lesson() {
               <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
                 <TouchableOpacity
                   style={styles.subjectGroup}
-                  onPress={() => setIsVisible(true)}>
+                  onPress={displayVideo}
+                  >
                   <Image
                     style={styles.image}
                     source={'image/penguin.jpeg'}
