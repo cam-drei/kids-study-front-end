@@ -61,6 +61,16 @@ const styles = StyleSheet.create({
   doneText: {
     color: '#808080',
   },
+  closeButton: {
+    alignItems: "center",
+    backgroundColor: "#547618",
+    padding: 10,
+    borderRadius: 5,
+    color: 'white'
+  },
+  closeText: {
+    color: 'white',
+  },
   modalView: {
     flex: 1,
     alignItems: 'center',
