@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     color: '#83b925'
   },
   lessonGroup: {
-    width: 340,
+    width: '98%',
     height: 170,
     borderColor: '#83b925',
     borderWidth: 1,
