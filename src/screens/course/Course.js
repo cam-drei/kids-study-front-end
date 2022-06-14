@@ -11,7 +11,6 @@ export default function Course() {
     navigate("/lesson");
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
@@ -67,7 +66,6 @@ export default function Course() {
           <Text style={styles.courseName}>Academy</Text>
         </TouchableOpacity>
       </HoverableView>
-
     </View>
   )
 }

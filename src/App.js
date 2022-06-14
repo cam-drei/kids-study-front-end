@@ -1,7 +1,6 @@
 import React from 'react';
 import Course from './screens/course/Course';
 import Lesson from './screens/lesson/Lesson';
-import Subject from './screens/subject/Subject';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {

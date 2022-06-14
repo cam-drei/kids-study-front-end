@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import styles from "./style";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
@@ -48,22 +48,6 @@ export default function Lesson() {
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
-                <Modal
-                  onRequestClose={() => setIsVisible(false)}
-                  visible={isVisible}
-                  animationType={"slide"}
-                >
-                  <View style={styles.modalView}>
-                    <iframe width="350" height="300"
-                      title="reading"
-                      src="https://www.youtube.com/embed/e_04ZrNroTo">
-                    </iframe>
-                    <Text style={styles.subjectName}>Reading</Text>
-                    <TouchableOpacity style={styles.closeButton} onPress={() => setIsVisible(false)}>
-                      <Text style={styles.closeText}>Close Video [X]</Text>
-                    </TouchableOpacity>
-                  </View>
-                </Modal>
               </HoverableView>
               
               <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
