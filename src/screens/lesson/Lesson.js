@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import styles from "./style";
 import HoverableView from "../../compoments/HoverableView";
@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
 
 export default function Lesson() {
-  const [isVisible, setIsVisible] = useState(false);
-
   let navigate = useNavigate();
   const goToCourseScreen = () => {
     navigate("/");

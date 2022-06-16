@@ -1,71 +1,60 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, TouchableOpacity, Image} from "react-native";
 import styles from "./style";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient";
 
 export default function Course() {
+  const [courseNames, setCourseNames] = useState([]);
+
   let navigate = useNavigate();
-  
-  const goToLessonScreen = () => {
+  const GoToLessonScreen = () => {
     navigate("/lesson");
   };
 
+  useEffect(() => {
+    const GetCourseName = async () => {
+      const { data, error } = await supabase
+        .from('courses')
+        .select('name')
+  
+      if(error) {
+        throw new Error(error.message)
+      }
+  
+      if(!data) {
+        throw new Error("Course not found")
+      }
+    
+      setCourseNames(data);
+      return data;
+    }
+    GetCourseName();
+  }, [])
+    
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
-
-      <HoverableView
-        style={styles.course}
-        onHover={{ backgroundColor: '#F8F6E9' }}
-      >
-        <TouchableOpacity onPress={goToLessonScreen}>
-          <Image
-            style={styles.image}
-            source={'image/book.jpeg'}
-          />
-          <Text style={styles.courseName}>Abeka</Text>
-        </TouchableOpacity>
-      </HoverableView>
-
-      <HoverableView
-        style={styles.course}
-        onHover={{ backgroundColor: '#F8F6E9' }}
-      >
-        <TouchableOpacity onPress={() => alert('Pressed!')}>
-          <Image
-            style={styles.image}
-            source={'image/book.jpeg'}
-          />
-          <Text style={styles.courseName}>Abeka</Text>
-        </TouchableOpacity>
-      </HoverableView>
       
-      <HoverableView
-        style={styles.course}
-        onHover={{ backgroundColor: '#F8F6E9' }}
-      >
-        <TouchableOpacity onPress={() => alert('Pressed!')}>
-          <Image
-            style={styles.image}
-            source={'image/color-pencil.webp'}
-          />
-          <Text style={styles.courseName}>Academy</Text>
-        </TouchableOpacity>
-      </HoverableView>
-
-      <HoverableView
-        style={styles.course}
-        onHover={{ backgroundColor: '#F8F6E9' }}
-      >
-        <TouchableOpacity onPress={() => alert('Pressed!')}>
-          <Image
-            style={styles.image}
-            source={'image/color-pencil.webp'}
-          />
-          <Text style={styles.courseName}>Academy</Text>
-        </TouchableOpacity>
-      </HoverableView>
+        <View >
+          {courseNames.map((val, index) => (
+            <View key={index}>
+              <HoverableView
+                style={styles.course}
+                onHover={{ backgroundColor: '#F8F6E9' }}
+              >
+              <TouchableOpacity onPress={GoToLessonScreen}>
+                <Image
+                  style={styles.image}
+                  source={'image/book.jpeg'}
+                />
+                <Text style={styles.courseName}>{val.name}</Text>
+              </TouchableOpacity>
+              </HoverableView>
+            </View>
+          ))}
+        </View>
     </View>
   )
 }
