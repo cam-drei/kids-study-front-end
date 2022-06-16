@@ -14,7 +14,7 @@ export default function Course() {
   };
 
   useEffect(() => {
-    const GetCourseName = async () => {
+    const GetCourseNames = async () => {
       const { data, error } = await supabase
         .from('courses')
         .select('name')
@@ -30,7 +30,7 @@ export default function Course() {
       setCourseNames(data);
       return data;
     }
-    GetCourseName();
+    GetCourseNames();
   }, [])
     
   return (
