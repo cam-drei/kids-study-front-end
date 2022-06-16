@@ -37,24 +37,24 @@ export default function Course() {
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
       
-        <View >
-          {courseNames.map((val, index) => (
-            <View key={index}>
-              <HoverableView
-                style={styles.course}
-                onHover={{ backgroundColor: '#F8F6E9' }}
-              >
-              <TouchableOpacity onPress={GoToLessonScreen}>
-                <Image
-                  style={styles.image}
-                  source={'image/book.jpeg'}
-                />
-                <Text style={styles.courseName}>{val.name}</Text>
-              </TouchableOpacity>
-              </HoverableView>
-            </View>
-          ))}
-        </View>
+      <View >
+        {courseNames.map((val, index) => (
+          <View key={index}>
+            <HoverableView
+              style={styles.course}
+              onHover={{ backgroundColor: '#F8F6E9' }}
+            >
+            <TouchableOpacity onPress={GoToLessonScreen}>
+              <Image
+                style={styles.image}
+                source={'image/book.jpeg'}
+              />
+              <Text style={styles.courseName}>{val.name}</Text>
+            </TouchableOpacity>
+            </HoverableView>
+          </View>
+        ))}
+      </View>
     </View>
   )
 }
