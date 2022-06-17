@@ -1,36 +1,29 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, TouchableOpacity, Image} from "react-native";
-import styles from "./style";
+import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import { Link } from "react-router-dom";
 
 export default function Course() {
   const [courseNames, setCourseNames] = useState([]);
 
-  let navigate = useNavigate();
-  const GoToLessonScreen = () => {
-    navigate("/lesson");
-  };
+  const getCourseNames = async () => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('name')
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Course not found")
+    }
+    setCourseNames(data);
+  }
 
   useEffect(() => {
-    const GetCourseNames = async () => {
-      const { data, error } = await supabase
-        .from('courses')
-        .select('name')
-  
-      if(error) {
-        throw new Error(error.message)
-      }
-  
-      if(!data) {
-        throw new Error("Course not found")
-      }
-    
-      setCourseNames(data);
-      return data;
-    }
-    GetCourseNames();
+   getCourseNames();
   }, [])
     
   return (
@@ -38,19 +31,21 @@ export default function Course() {
       <Text style={styles.header}>Study Courses</Text>
       
       <View >
-        {courseNames.map((val, index) => (
+        {courseNames.map((value, index) => (
           <View key={index}>
             <HoverableView
               style={styles.course}
               onHover={{ backgroundColor: '#F8F6E9' }}
             >
-            <TouchableOpacity onPress={GoToLessonScreen}>
-              <Image
-                style={styles.image}
-                source={'image/book.jpeg'}
-              />
-              <Text style={styles.courseName}>{val.name}</Text>
-            </TouchableOpacity>
+            <Link to={`/${value.name}/lesson`}>
+              <TouchableOpacity>
+                <Image
+                  style={styles.image}
+                  source={'image/book.jpeg'}
+                />
+                <Text style={styles.courseName}>{value.name}</Text>
+              </TouchableOpacity>
+            </Link>
             </HoverableView>
           </View>
         ))}

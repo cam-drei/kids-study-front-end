@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import styles from "./style";
+import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
@@ -18,43 +18,41 @@ export default function Lesson() {
   const displayVideo = () => {
     window.open('https://photos.google.com/share/AF1QipPGtp7gLHmZY8O2JkSfosjMttVzoKX0C1hXcJpg7xc8GEsvQcM9_83jQpD-OSEs4w/photo/AF1QipNRJ7Iuecr7XlNwSoudG74JLBxN_b0oqaXmv-9t?key=TFB0VVBuVkh2ak9ybXdCUWlfOGU0MFhTVVZscWRn', '_blank');
   }
+
+  const getSubjectNames = async () => {
+    const { data, error } = await supabase
+      .from('subjects')
+      .select('name')
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Course not found")
+    }
+    setSubjectNames(data);
+  }
   
   useEffect(() => {
-    const GetSubjectNames = async () => {
-      const { data, error } = await supabase
-        .from('subjects')
-        .select('name')
-  
-      if(error) {
-        throw new Error(error.message)
-      }
-  
-      if(!data) {
-        throw new Error("Course not found")
-      }
-      setSubjectNames(data);
-      return data;
-    }
-    GetSubjectNames();
+    getSubjectNames();
   }, []);
 
-  useEffect(() => {
-    const GetLessonNames = async () => {
-      const { data, error } = await supabase
-        .from('lessons')
-        .select('name')
-  
-      if(error) {
-        throw new Error(error.message)
-      }
-  
-      if(!data) {
-        throw new Error("Course not found")
-      }
-    setLessontNames(data);
-      return data;
+  const getLessonNames = async () => {
+    const { data, error } = await supabase
+      .from('lessons')
+      .select('name')
+
+    if(error) {
+      throw new Error(error.message)
     }
-    GetLessonNames();
+    if(!data) {
+      throw new Error("Course not found")
+    }
+    setLessontNames(data);
+  }
+
+  useEffect(() => {
+    getLessonNames();
   }, [])
 
   return (
