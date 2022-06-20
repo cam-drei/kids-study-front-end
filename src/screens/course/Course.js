@@ -4,14 +4,14 @@ import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
-
+import Lesson from "../lesson/Lesson";
 export default function Course() {
   const [courseNames, setCourseNames] = useState([]);
 
   const getCourseNames = async () => {
     const { data, error } = await supabase
       .from('courses')
-      .select('name')
+      .select('id, name')
 
     if(error) {
       throw new Error(error.message)
@@ -30,7 +30,7 @@ export default function Course() {
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
       
-      <View >
+      <View>
         {courseNames.map((value, index) => (
           <View key={index}>
             <HoverableView

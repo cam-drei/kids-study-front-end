@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AiFillHome } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
 
-export default function Lesson() {
+export default function Lesson(props) {
   const [subjectNames, setSubjectNames] = useState([]);
   const [lessonNames, setLessontNames] = useState([]);
 
@@ -22,7 +22,7 @@ export default function Lesson() {
   const getSubjectNames = async () => {
     const { data, error } = await supabase
       .from('subjects')
-      .select('name')
+      .select('name, lessons!inner(name)')
 
     if(error) {
       throw new Error(error.message)
@@ -30,6 +30,7 @@ export default function Lesson() {
     if(!data) {
       throw new Error("Course not found")
     }
+    console.log('subjects ===', data)
     setSubjectNames(data);
   }
   
@@ -40,7 +41,8 @@ export default function Lesson() {
   const getLessonNames = async () => {
     const { data, error } = await supabase
       .from('lessons')
-      .select('name')
+      .select('name, courses!inner(name)')
+      .filter('courses.id', 'in', `(${props.courseId})`)
 
     if(error) {
       throw new Error(error.message)
@@ -57,7 +59,7 @@ export default function Lesson() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{'Course Name'}</Text>
+      <Text style={styles.header}>{props.courseName}</Text>
       <AiFillHome
         onClick={goToCourseScreen}
         style={{fontSize: 25, color: '#547618', position: 'absolute', paddingTop: 28, paddingLeft: 10}}
@@ -70,49 +72,29 @@ export default function Lesson() {
               <Text style={styles.lessonName}>{value.name}</Text>
               <View style={styles.lessonGroup}>
                 <ScrollView horizontal={true}>
-                {subjectNames.map((value, index) => (
-                  <View key={index}>
-                    <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
-                      <TouchableOpacity
-                        style={styles.subjectGroup}
-                        onPress={displayVideo}
-                        >
-                        <Image
-                          style={styles.image}
-                          source={'image/penguin.jpeg'}
-                        />
-                        <View style={styles.subjectDiscription}>
-                          <TouchableOpacity style={styles.doneButton}>
-                            <Text style={styles.doneText}>Done</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity>
-                            <Text style={styles.subjectName}>{value.name}</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </TouchableOpacity>
-                    </HoverableView>
-                  </View>
-                  ))}
-
-                  <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
-                    <TouchableOpacity
-                      style={styles.subjectGroup}
-                      onPress={() => alert('Pressed!')}>
-                      <Image
-                        style={styles.image}
-                        source={'image/penguin.jpeg'}
-                      />
-                      <View style={styles.subjectDiscription}>
-                        {/* <TouchableOpacity style={styles.doneButton}>
-                          <Text style={styles.doneText}>Done</Text>
-                        </TouchableOpacity> */}
-                        <TouchableOpacity>
-                          <Text style={styles.subjectName}>Reading</Text>
+                  {subjectNames.map((value, index) => (
+                    <View key={index}>
+                      <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
+                        <TouchableOpacity
+                          style={styles.subjectGroup}
+                          onPress={displayVideo}
+                          >
+                          <Image
+                            style={styles.image}
+                            source={'image/penguin.jpeg'}
+                          />
+                          <View style={styles.subjectDiscription}>
+                            <TouchableOpacity style={styles.doneButton}>
+                              <Text style={styles.doneText}>Done</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                              <Text style={styles.subjectName}>{value.name}</Text>
+                            </TouchableOpacity>
+                          </View>
                         </TouchableOpacity>
-                      </View>
-                    </TouchableOpacity>
-                  </HoverableView>
-
+                      </HoverableView>
+                    </View>
+                  ))}
                 </ScrollView>
               </View>
             </HoverableView>

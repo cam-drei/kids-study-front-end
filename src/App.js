@@ -3,7 +3,6 @@ import Course from './screens/course/Course';
 import Lesson from './screens/lesson/Lesson';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { supabase } from './supabaseClient';
-import { View } from 'react-native';
 
 function App() {
   const [courseNames, setCourseNames] = useState([]);
@@ -11,7 +10,7 @@ function App() {
   const getCourseNames = async () => {
     const { data, error } = await supabase
       .from('courses')
-      .select('name')
+      .select('name, id')
 
     if(error) {
       throw new Error(error.message)
@@ -29,10 +28,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Course />}>
-        </Route>
+        <Route path="/" element={<Course />} />
         {courseNames.map((value, index) => (
-          <Route key={index} path={`/${value.name}/lesson`} element={<Lesson />} />
+          <Route 
+            key={index} 
+            path={`/${value.name}/lesson/`} 
+            element={<Lesson courseId={value.id} courseName={value.name}/>}
+          />
         ))}
       </Routes>
     </BrowserRouter>
