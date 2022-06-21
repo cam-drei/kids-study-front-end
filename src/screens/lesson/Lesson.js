@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from "react-native";
 import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,8 @@ export default function Lesson(props) {
     navigate("/");
   };
 
-  const displayVideo = () => {
-    window.open('https://photos.google.com/share/AF1QipPGtp7gLHmZY8O2JkSfosjMttVzoKX0C1hXcJpg7xc8GEsvQcM9_83jQpD-OSEs4w/photo/AF1QipNRJ7Iuecr7XlNwSoudG74JLBxN_b0oqaXmv-9t?key=TFB0VVBuVkh2ak9ybXdCUWlfOGU0MFhTVVZscWRn', '_blank');
+  const onShowContent = (urlContent) => {
+    window.open(`${urlContent}`, '_blank');
   }
 
   const getSubjectNames = async () => {
@@ -77,17 +77,27 @@ export default function Lesson(props) {
                         <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
                           <TouchableOpacity
                             style={styles.subjectGroup}
-                            onPress={displayVideo}
+                            onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
                           >
+                            <TouchableOpacity style={styles.subjectDiscription}>
+                              <Text style={styles.subjectName}>{subject.name}</Text>
+                            </TouchableOpacity>
                             <Image
                               style={styles.image}
                               source={'image/penguin.jpeg'}
                             />
-                            <View style={styles.subjectDiscription}>
-                              {subject.done === true ? displayDoneButton() : null}
-                              <TouchableOpacity>
-                                <Text style={styles.subjectName}>{subject.name}</Text>
-                              </TouchableOpacity>
+                            <View style={styles.subjectBottomButtonGroup}>
+                              {subject.done === true ? onDisplayDoneButton() : null}
+                              {subject.document_link !== null ?
+                                <TouchableOpacity
+                                  style={[styles.subjectBottomButton, styles.showDocButton]}
+                                  onPress={() => onShowContent(subject.document_link)}
+                                >
+                                  <Text style={styles.subjectBottomButtonText}>Document</Text>
+                                </TouchableOpacity>
+                                :
+                                null
+                              }
                             </View>
                           </TouchableOpacity>
                         </HoverableView>
@@ -103,13 +113,11 @@ export default function Lesson(props) {
     </View>
   )
 
-  function displayDoneButton () {
+  function onDisplayDoneButton () {
     return (
-      <View>
-        <TouchableOpacity style={styles.doneButton}>
-          <Text style={styles.doneText}>Done</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={[styles.subjectBottomButton, styles.doneButton]}>
+        <Text style={styles.subjectBottomButtonText}>Done</Text>
+      </TouchableOpacity>
     )
   }
 }

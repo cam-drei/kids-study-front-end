@@ -9,8 +9,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    color: 'red',
+    color: '#FF0000',
     fontSize: 30,
+    fontWeight: 'bold',
     marginTop: 20,
   },
   courseName: {
