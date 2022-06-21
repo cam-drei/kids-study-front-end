@@ -78,15 +78,13 @@ export default function Lesson(props) {
                           <TouchableOpacity
                             style={styles.subjectGroup}
                             onPress={displayVideo}
-                            >
+                          >
                             <Image
                               style={styles.image}
                               source={'image/penguin.jpeg'}
                             />
                             <View style={styles.subjectDiscription}>
-                              <TouchableOpacity style={styles.doneButton}>
-                                <Text style={styles.doneText}>Done</Text>
-                              </TouchableOpacity>
+                              {subject.done === true ? displayDoneButton() : null}
                               <TouchableOpacity>
                                 <Text style={styles.subjectName}>{subject.name}</Text>
                               </TouchableOpacity>
@@ -104,4 +102,14 @@ export default function Lesson(props) {
       </View>
     </View>
   )
+
+  function displayDoneButton () {
+    return (
+      <View>
+        <TouchableOpacity style={styles.doneButton}>
+          <Text style={styles.doneText}>Done</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 }
