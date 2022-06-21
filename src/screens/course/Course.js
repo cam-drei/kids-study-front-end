@@ -4,7 +4,7 @@ import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
-import Lesson from "../lesson/Lesson";
+
 export default function Course() {
   const [courseNames, setCourseNames] = useState([]);
 
@@ -31,19 +31,19 @@ export default function Course() {
       <Text style={styles.header}>Study Courses</Text>
       
       <View>
-        {courseNames.map((value, index) => (
+        {courseNames.map((course, index) => (
           <View key={index}>
             <HoverableView
               style={styles.course}
               onHover={{ backgroundColor: '#F8F6E9' }}
             >
-            <Link to={`/${value.name}/lesson`}>
+            <Link to={`/${course.name}/lesson`}>
               <TouchableOpacity>
                 <Image
                   style={styles.image}
                   source={'image/book.jpeg'}
                 />
-                <Text style={styles.courseName}>{value.name}</Text>
+                <Text style={styles.courseName}>{course.name}</Text>
               </TouchableOpacity>
             </Link>
             </HoverableView>

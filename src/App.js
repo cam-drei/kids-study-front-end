@@ -29,11 +29,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Course />} />
-        {courseNames.map((value, index) => (
+        {courseNames.map((course, index) => (
           <Route 
             key={index} 
-            path={`/${value.name}/lesson/`} 
-            element={<Lesson courseId={value.id} courseName={value.name}/>}
+            path={`/${course.name}/lesson/`} 
+            element={<Lesson courseId={course.id} courseName={course.name}/>}
           />
         ))}
       </Routes>
