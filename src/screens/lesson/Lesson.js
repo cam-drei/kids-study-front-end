@@ -28,7 +28,7 @@ export default function Lesson(props) {
       throw new Error(error.message)
     }
     if(!data) {
-      throw new Error("Course not found")
+      throw new Error("Subjects not found")
     }
     setSubjectNames(data);
   }
@@ -47,7 +47,7 @@ export default function Lesson(props) {
       throw new Error(error.message)
     }
     if(!data) {
-      throw new Error("Course not found")
+      throw new Error("Lessons not found")
     }
     setLessontNames(data);
   }
