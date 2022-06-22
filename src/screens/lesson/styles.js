@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
   },
-  lessonGroup: {
+  lessonContent: {
     width: "98%",
     height: 170,
     borderColor: "#83b925",
@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    height: 50,
-    width: 80,
+    height: 80,
+    width: 140,
   },
   subjectGroup: {
     width: 150,
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
+    height: 40,
   },
   subjectName: {
     fontSize: 15,
@@ -75,6 +76,30 @@ const styles = StyleSheet.create({
     width: 146,
     bottom: 1,
     position: "absolute",
+  },
+  lessonButtonGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    marginLeft: 5,
+  },
+  lessonSubButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    height: 25,
+    width: 105,
+    marginBottom: 10,
+    margin: 5,
+    borderWidth: 1.5,
+  },
+  lessonDoneButton: {
+    borderColor: '#FF9900',
+  },
+  lessonDocumentButton: {
+    borderColor: '#83b925',
+  },
+  lessonShowAllButton: {
+    borderColor: '#000000',
   },
 });
 

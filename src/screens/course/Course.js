@@ -29,7 +29,7 @@ export default function Course() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
-      
+
       <View>
         {courseNames.map((course, index) => (
           <View key={index}>
@@ -41,7 +41,7 @@ export default function Course() {
               <TouchableOpacity>
                 <Image
                   style={styles.image}
-                  source={'image/book.jpeg'}
+                  source={'/image/book.jpeg'}
                 />
                 <Text style={styles.courseName}>{course.name}</Text>
               </TouchableOpacity>
