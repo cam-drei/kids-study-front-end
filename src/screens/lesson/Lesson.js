@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-native";
 import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineRead } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
 
 export default function Lesson(props) {
   const [subjectNames, setSubjectNames] = useState([]);
   const [lessonNames, setLessontNames] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [lessonId, setLessonId] = useState(0);
+  const [lessonName, setLessonName] = useState(null);
 
   let navigate = useNavigate();
   const goToCourseScreen = () => {
@@ -59,16 +62,19 @@ export default function Lesson(props) {
   return (
     <View style={styles.container}>
       {renderHeader(props.courseName)}
-      <View>
-        {lessonNames.map((lesson, index) => (
-          <View key={index}>
-            <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
-              {renderLessonTitleGroup(lesson.name)}
+      {lessonNames.map((lesson, index) => (
+        <View key={index}>
+          <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
+            {renderLessonTitleGroup(lesson.name, lesson.id)}
+            <View style={styles.lessonContent}>
+              <ScrollView horizontal={true}>
               {renderLessonContent(lesson.id)}
-            </HoverableView>
-          </View>
-        ))}
-      </View>
+              </ScrollView>
+            </View>
+          </HoverableView>
+        </View>
+      ))}
+      {renderSpecificLessonModal(lessonId, lessonName)}
     </View>
   );
 
@@ -78,13 +84,19 @@ export default function Lesson(props) {
         <Text style={styles.header}>{courseName}</Text>
         <AiFillHome
           onClick={goToCourseScreen}
-          style={{fontSize: 25, color: '#547618', position: 'absolute', paddingTop: 28, paddingLeft: 10}}
+          style={{fontSize: 25, color: '#547618', position: 'absolute', paddingTop: 15, paddingLeft: 10}}
         />
       </View>
     )
   };
 
-  function renderLessonTitleGroup (lessonName) {
+  function handlePressButton (lessonId, lessonName) {
+    setModalVisible(true);
+    setLessonId(lessonId);
+    setLessonName(lessonName);
+  }
+
+  function renderLessonTitleGroup (lessonName, lessonId) {
     return (
       <View>
         <Text style={styles.lessonName}>{lessonName}</Text>
@@ -100,15 +112,17 @@ export default function Lesson(props) {
 
           <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
             <TouchableOpacity
-              style={[styles.lessonSubButton, styles.lessonDocumentButton]}
+              style={[styles.lessonSubButton, styles.lessonDocumentButton, {flexDirection: 'row'}]}
             >
               <Text>Document</Text>
+              <AiOutlineRead style={{paddingLeft: 4}}/>
             </TouchableOpacity>
           </HoverableView>
 
           <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
             <TouchableOpacity
               style={[styles.lessonSubButton, styles.lessonShowAllButton]}
+              onPress={() => handlePressButton(lessonId, lessonName)}
             >
               <Text>Show all</Text>
             </TouchableOpacity>
@@ -118,36 +132,56 @@ export default function Lesson(props) {
     )
   };
 
+  function renderSpecificLessonModal (lessonId, lessonName) {
+    return (
+      <Modal
+        onRequestClose={() => setModalVisible(false)}
+        visible={modalVisible}
+        animationType={"slide"}
+      >
+        <View style={styles.modalView}>
+          <View>
+            <Text style={styles.lessonTitleModal}>{lessonName}</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeText}>Close [X]</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lessonContentModal}>
+            {renderLessonContent(lessonId)}
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
   function renderLessonContent (lessonId) {
     return (
-      <View style={styles.lessonContent}>
-        <ScrollView horizontal={true}>
-          {subjectNames.map((subject, index) => (
-            <View key={index}>
-              {lessonId === subject.lesson_id ?
-                <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
-                  <TouchableOpacity
-                    style={styles.subjectGroup}
-                    onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
-                  >
-                    <TouchableOpacity style={styles.subjectDiscription}>
-                      <Text style={styles.subjectName}>{subject.name}</Text>
-                    </TouchableOpacity>
-                    <Image
-                      style={styles.image}
-                      source={'/image/happy-girl-writing.jpeg'}
-                    />
-                    <View style={styles.subjectBottomButtonGroup}>
-                      {subject.done === true ? displayDoneButton() : null}
-                      {subject.document_link !== null ? displayDocumentButton(subject.document_link) : null}
-                    </View>
+      <>
+        {subjectNames.map((subject, index) => (
+          <View key={index}>
+            {lessonId === subject.lesson_id ?
+              <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
+                <TouchableOpacity
+                  style={styles.subjectGroup}
+                  onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
+                >
+                  <TouchableOpacity style={styles.subjectDiscription}>
+                    <Text style={styles.subjectName}>{subject.name}</Text>
                   </TouchableOpacity>
-                </HoverableView>
-              : null}
-            </View>
-          ))}
-        </ScrollView>
-      </View>
+                  <Image
+                    style={styles.image}
+                    source={'/image/happy-girl-writing.jpeg'}
+                  />
+                  <View style={styles.subjectBottomButtonGroup}>
+                    {subject.done === true ? displayDoneButton() : null}
+                    {subject.document_link !== null ? displayDocumentButton(subject.document_link) : null}
+                  </View>
+                </TouchableOpacity>
+              </HoverableView>
+            : null}
+          </View>
+        ))}
+      </>
     )
   };
 
@@ -162,10 +196,11 @@ export default function Lesson(props) {
   function displayDocumentButton (documentLink) {
     return (
       <TouchableOpacity
-        style={[styles.subjectBottomButton, styles.showDocButton]}
+        style={[styles.subjectBottomButton, styles.showDocButton, {flexDirection: 'row'}]}
         onPress={() => onShowContent(documentLink)}
       >
         <Text style={styles.subjectBottomButtonText}>Document</Text>
+        <AiOutlineRead style={{color: '#FFFFFF', paddingLeft: 4}}/>
       </TouchableOpacity>
     )
   };

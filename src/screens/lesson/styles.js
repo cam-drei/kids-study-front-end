@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
     color: "#FF0000",
     fontSize: 30,
     fontWeight: "bold",
-    marginTop: 20,
-    alignSelf: "center",
+    marginTop: 10,
+    alignSelf: 'center',
   },
   lessonName: {
     fontSize: 30,
@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
     height: 170,
     borderColor: "#83b925",
     borderWidth: 1,
-    alignSelf: "center",
+    alignSelf: 'center',
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     height: 80,
@@ -38,12 +38,12 @@ const styles = StyleSheet.create({
     height: 150,
     borderColor: "#83b925",
     borderWidth: 1,
-    alignItems: "center",
+    alignItems: 'center',
     margin: 5,
   },
   subjectDiscription: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: "space-evenly",
     height: 40,
   },
@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
     top: 2,
   },
   subjectBottomButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
-    height: 20,
+    height: 24,
     margin: 1,
   },
   doneButton: {
@@ -80,16 +80,16 @@ const styles = StyleSheet.create({
   lessonButtonGroup: {
     flex: 1,
     flexDirection: 'row',
-    marginLeft: 5,
+    marginLeft: 8,
   },
   lessonSubButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
     height: 25,
     width: 105,
-    marginBottom: 10,
-    margin: 5,
+    marginBottom: 8,
+    margin: 3,
     borderWidth: 1.5,
   },
   lessonDoneButton: {
@@ -100,6 +100,35 @@ const styles = StyleSheet.create({
   },
   lessonShowAllButton: {
     borderColor: '#000000',
+  },
+  closeButton: {
+    borderColor: '#FF0000',
+    borderWidth: 1.5,
+    padding: 10,
+    borderRadius: 20,
+    height: 25,
+    margin: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+  },
+  closeText: {
+    color: '#FF0000',
+  },
+  modalView: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  lessonContentModal: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  lessonTitleModal: {
+    color: "#000000",
+    fontSize: 30,
+    fontWeight: "bold",
+    marginTop: 10,
+    alignSelf: 'center',
   },
 });
 
