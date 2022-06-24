@@ -65,7 +65,7 @@ export default function Lesson(props) {
       {lessonNames.map((lesson, index) => (
         <View key={index}>
           <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
-            {renderLessonTitleGroup(lesson.name, lesson.id, lesson.document_link, lesson.video_link)}
+            {renderLessonTitleGroup(lesson.name, lesson.description, lesson.id, lesson.document_link, lesson.video_link)}
             <View style={styles.lessonContent}>
               <ScrollView horizontal={true}>
                 {renderSubjectItems(lesson.id)}
@@ -90,10 +90,13 @@ export default function Lesson(props) {
     )
   };
 
-  function renderLessonTitleGroup (lessonName, lessonId, lessonDocument, lessonVideo) {
+  function renderLessonTitleGroup (lessonName, lessonDescription, lessonId, lessonDocument, lessonVideo) {
     return (
       <View>
-        <Text style={styles.lessonName}>{lessonName}</Text>
+        <View style={styles.flexWrapOnRow}>
+          <Text style={styles.lessonName}>{lessonName}</Text>
+          {lessonDescription !== null ? <Text style={styles.lessonDescriptionText}>( {lessonDescription} )</Text> : null}
+        </View>
         <View style={[styles.lessonButtonGroup, styles.flexWrapOnRow]}>
           {displayDoneLessonButton()}
           {lessonDocument !== null ? displayDocumentLessonButton(lessonDocument) : null}

@@ -129,6 +129,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
+  lessonDescriptionText: {
+    marginTop: 18,
+    marginLeft: 10,
+    color: '#666666'
+  }
 });
 
 export default styles;
