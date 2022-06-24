@@ -5,10 +5,11 @@ import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
 import { AiFillHome, AiOutlineRead, AiOutlineVideoCamera } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
+import * as _ from 'lodash';
 
 export default function Lesson(props) {
-  const [subjectNames, setSubjectNames] = useState([]);
-  const [lessonNames, setLessontNames] = useState([]);
+  const [subjectItems, setSubjectItems] = useState([]);
+  const [lessonItems, setLessonItems] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [lessonId, setLessonId] = useState(0);
   const [lessonName, setLessonName] = useState(null);
@@ -22,7 +23,7 @@ export default function Lesson(props) {
     window.open(`${urlContent}`, '_blank');
   };
 
-  const getSubjectNames = async () => {
+  const getSubjectItems = async () => {
     const { data, error } = await supabase
       .from('subjects')
       .select('*, lessons!inner(*)')
@@ -33,14 +34,14 @@ export default function Lesson(props) {
     if(!data) {
       throw new Error("Subjects not found")
     }
-    setSubjectNames(data);
+    setSubjectItems(data);
   };
   
   useEffect(() => {
-    getSubjectNames();
+    getSubjectItems();
   }, []);
 
-  const getLessonNames = async () => {
+  const getLessonItems = async () => {
     const { data, error } = await supabase
       .from('lessons')
       .select('*, courses!inner(*)')
@@ -52,28 +53,17 @@ export default function Lesson(props) {
     if(!data) {
       throw new Error("Lessons not found")
     }
-    setLessontNames(data);
+    setLessonItems(data);
   };
 
   useEffect(() => {
-    getLessonNames();
+    getLessonItems();
   }, []);
 
   return (
     <View style={styles.container}>
       {renderHeader(props.courseName)}
-      {lessonNames.map((lesson, index) => (
-        <View key={index}>
-          <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
-            {renderLessonTitleGroup(lesson.name, lesson.description, lesson.id, lesson.document_link, lesson.video_link)}
-            <View style={styles.lessonContent}>
-              <ScrollView horizontal={true}>
-                {renderSubjectItems(lesson.id)}
-              </ScrollView>
-            </View>
-          </HoverableView>
-        </View>
-      ))}
+      {renderSortedLessonItems()}
       {renderSubjectItemsModal(lessonId, lessonName)}
     </View>
   );
@@ -89,6 +79,27 @@ export default function Lesson(props) {
       </View>
     )
   };
+
+  function renderSortedLessonItems () {
+    const sortedLessonItems = _
+      .chain(lessonItems)
+      .sortBy('name')
+      .map((lesson, index) => (
+        <View key={index}>
+          <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
+            {renderLessonTitleGroup(lesson.name, lesson.description, lesson.id, lesson.document_link, lesson.video_link)}
+            <View style={styles.lessonContent}>
+              <ScrollView horizontal={true}>
+              {renderSortedSubjectItems(lesson.id)}
+              </ScrollView>
+            </View>
+          </HoverableView>
+        </View>
+      ))
+      .value();
+
+    return sortedLessonItems;
+  }
 
   function renderLessonTitleGroup (lessonName, lessonDescription, lessonId, lessonDocument, lessonVideo) {
     return (
@@ -107,35 +118,37 @@ export default function Lesson(props) {
     )
   };
 
-  function renderSubjectItems (lessonId) {
-    return (
-      <>
-        {subjectNames.map((subject, index) => (
-          <View key={index}>
-            {lessonId === subject.lesson_id ?
-              <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
-                <TouchableOpacity
-                  style={styles.subjectGroup}
-                  onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
-                >
-                  <TouchableOpacity style={styles.subjectDiscription}>
-                    <Text style={styles.subjectName}>{subject.name}</Text>
-                  </TouchableOpacity>
-                  <Image
-                    style={styles.image}
-                    source={'/image/happy-girl-writing.jpeg'}
-                  />
-                  <View style={styles.subjectBottomButtonGroup}>
-                    {subject.done === true ? displayDoneSubjectButton() : null}
-                    {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
-                  </View>
+  function renderSortedSubjectItems (lessonId) {
+    const sortedSubjectItems = _
+      .chain(subjectItems)
+      .sortBy('name')
+      .map((subject, index) => (
+        <View key={index}>
+          {lessonId === subject.lesson_id ?
+            <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
+              <TouchableOpacity
+                style={styles.subjectGroup}
+                onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
+              >
+                <TouchableOpacity style={styles.subjectDiscription}>
+                  <Text style={styles.subjectName}>{subject.name}</Text>
                 </TouchableOpacity>
-              </HoverableView>
-            : null}
-          </View>
-        ))}
-      </>
-    )
+                <Image
+                  style={styles.image}
+                  source={'/image/happy-girl-writing.jpeg'}
+                />
+                <View style={styles.subjectBottomButtonGroup}>
+                  {subject.done === true ? displayDoneSubjectButton() : null}
+                  {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
+                </View>
+              </TouchableOpacity>
+            </HoverableView>
+          : null}
+        </View>
+      ))
+      .value();
+
+    return sortedSubjectItems;
   };
 
   function renderSubjectItemsModal (lessonId, lessonName) {
@@ -153,7 +166,7 @@ export default function Lesson(props) {
             </TouchableOpacity>
           </View>
           <View style={styles.flexWrapOnRow}>
-            {renderSubjectItems(lessonId)}
+            {renderSortedSubjectItems(lessonId)}
           </View>
         </View>
       </Modal>

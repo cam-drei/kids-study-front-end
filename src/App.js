@@ -5,9 +5,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 
 function App() {
-  const [courseNames, setCourseNames] = useState([]);
+  const [courseItems, setCourseItems] = useState([]);
 
-  const getCourseNames = async () => {
+  const getCourseItems = async () => {
     const { data, error } = await supabase
       .from('courses')
       .select('name, id')
@@ -18,18 +18,18 @@ function App() {
     if(!data) {
       throw new Error("Course not found")
     }
-    setCourseNames(data);
-  }
+    setCourseItems(data);
+  };
 
   useEffect(() => {
-    getCourseNames();
-  }, [])
+    getCourseItems();
+  }, []);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Course />} />
-        {courseNames.map((course, index) => (
+        {courseItems.map((course, index) => (
           <Route 
             key={index} 
             path={`/${course.name}/lesson/`} 

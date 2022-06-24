@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     marginLeft: 10,
     color: '#666666'
-  }
+  },
 });
 
 export default styles;

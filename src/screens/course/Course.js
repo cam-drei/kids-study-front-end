@@ -4,11 +4,12 @@ import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
+import * as _ from 'lodash';
 
 export default function Course() {
-  const [courseNames, setCourseNames] = useState([]);
+  const [courseItems, setCourseItems] = useState([]);
 
-  const getCourseNames = async () => {
+  const getCourseItems = async () => {
     const { data, error } = await supabase
       .from('courses')
       .select('id, name')
@@ -19,37 +20,44 @@ export default function Course() {
     if(!data) {
       throw new Error("Course not found")
     }
-    setCourseNames(data);
-  }
+    setCourseItems(data);
+  };
 
   useEffect(() => {
-   getCourseNames();
-  }, [])
+   getCourseItems();
+  }, []);
     
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
-
-      <View>
-        {courseNames.map((course, index) => (
-          <View key={index}>
-            <HoverableView
-              style={styles.course}
-              onHover={{ backgroundColor: '#F8F6E9' }}
-            >
-            <Link to={`/${course.name}/lesson`}>
-              <TouchableOpacity>
-                <Image
-                  style={styles.image}
-                  source={'/image/book.jpeg'}
-                />
-                <Text style={styles.courseName}>{course.name}</Text>
-              </TouchableOpacity>
-            </Link>
-            </HoverableView>
-          </View>
-        ))}
-      </View>
+      {renderSortedCourseItems()}
     </View>
-  )
+  );
+
+  function renderSortedCourseItems () {
+    const sortedCourseItems = _
+      .chain(courseItems)
+      .sortBy('name')
+      .map((course, index) => (
+        <View key={index}>
+          <HoverableView
+            style={styles.course}
+            onHover={{ backgroundColor: '#F8F6E9' }}
+          >
+          <Link to={`/${course.name}/lesson`}>
+            <TouchableOpacity>
+              <Image
+                style={styles.image}
+                source={'/image/book.jpeg'}
+              />
+              <Text style={styles.courseName}>{course.name}</Text>
+            </TouchableOpacity>
+          </Link>
+          </HoverableView>
+        </View>
+      ))
+      .value();
+
+    return sortedCourseItems;
+  };
 }
