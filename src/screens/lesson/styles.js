@@ -95,6 +95,11 @@ const styles = StyleSheet.create({
   lessonDoneButton: {
     borderColor: '#FF9900',
   },
+  pressedLessonDoneButton: {
+    backgroundColor: '#FF9900',
+    borderColor: '#FF9900',
+  },
+  
   lessonDocumentButton: {
     borderColor: '#83b925',
   },

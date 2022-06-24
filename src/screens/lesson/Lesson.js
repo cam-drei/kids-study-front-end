@@ -87,7 +87,7 @@ export default function Lesson(props) {
       .map((lesson, index) => (
         <View key={index}>
           <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
-            {renderLessonTitleGroup(lesson.name, lesson.description, lesson.id, lesson.document_link, lesson.video_link)}
+            {renderLessonTitleGroup(lesson.name, lesson.description, lesson.id, lesson.done, lesson.document_link, lesson.video_link)}
             <View style={styles.lessonContent}>
               <ScrollView horizontal={true}>
               {renderSortedSubjectItems(lesson.id)}
@@ -101,7 +101,7 @@ export default function Lesson(props) {
     return sortedLessonItems;
   }
 
-  function renderLessonTitleGroup (lessonName, lessonDescription, lessonId, lessonDocument, lessonVideo) {
+  function renderLessonTitleGroup (lessonName, lessonDescription, lessonId, lessonDone, lessonDocument, lessonVideo) {
     return (
       <View>
         <View style={styles.flexWrapOnRow}>
@@ -109,7 +109,7 @@ export default function Lesson(props) {
           {lessonDescription !== null ? <Text style={styles.lessonDescriptionText}>( {lessonDescription} )</Text> : null}
         </View>
         <View style={[styles.lessonButtonGroup, styles.flexWrapOnRow]}>
-          {displayDoneLessonButton()}
+          {displayDoneLessonButton(lessonDone)}
           {lessonDocument !== null ? displayDocumentLessonButton(lessonDocument) : null}
           {lessonVideo !== null ? displayVideoLessonButton(lessonVideo) : null}
           {displayShowAllLessonButton (lessonId, lessonName)}
@@ -173,14 +173,22 @@ export default function Lesson(props) {
     )
   };
 
-  function displayDoneLessonButton () {
+  function displayDoneLessonButton (lessonDone) {
     return (
       <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
-        <TouchableOpacity
-          style={[styles.lessonSubButton, styles.lessonDoneButton]}
-        >
-            <Text>Click for Done</Text>
-        </TouchableOpacity>
+        {lessonDone === true ?
+          <TouchableOpacity
+            style={[styles.lessonSubButton, styles.pressedLessonDoneButton]}
+          >
+              <Text style={styles.subjectBottomButtonText}>Done</Text>
+          </TouchableOpacity>
+        :
+          <TouchableOpacity
+            style={[styles.lessonSubButton, styles.lessonDoneButton]}
+          >
+              <Text>Click for Done</Text>
+          </TouchableOpacity>
+        }
       </HoverableView>
     )
   };
