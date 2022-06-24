@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-na
 import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
-import { AiFillHome, AiOutlineRead } from "react-icons/ai";
+import { AiFillHome, AiOutlineRead, AiOutlineVideoCamera } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
 
 export default function Lesson(props) {
@@ -20,7 +20,7 @@ export default function Lesson(props) {
 
   const onShowContent = (urlContent) => {
     window.open(`${urlContent}`, '_blank');
-  }
+  };
 
   const getSubjectNames = async () => {
     const { data, error } = await supabase
@@ -34,7 +34,7 @@ export default function Lesson(props) {
       throw new Error("Subjects not found")
     }
     setSubjectNames(data);
-  }
+  };
   
   useEffect(() => {
     getSubjectNames();
@@ -53,7 +53,7 @@ export default function Lesson(props) {
       throw new Error("Lessons not found")
     }
     setLessontNames(data);
-  }
+  };
 
   useEffect(() => {
     getLessonNames();
@@ -65,16 +65,16 @@ export default function Lesson(props) {
       {lessonNames.map((lesson, index) => (
         <View key={index}>
           <HoverableView onHover={{ backgroundColor: '#F8F6E9' }}>
-            {renderLessonTitleGroup(lesson.name, lesson.id)}
+            {renderLessonTitleGroup(lesson.name, lesson.id, lesson.document_link, lesson.video_link)}
             <View style={styles.lessonContent}>
               <ScrollView horizontal={true}>
-              {renderLessonContent(lesson.id)}
+                {renderSubjectItems(lesson.id)}
               </ScrollView>
             </View>
           </HoverableView>
         </View>
       ))}
-      {renderSpecificLessonModal(lessonId, lessonName)}
+      {renderSubjectItemsModal(lessonId, lessonName)}
     </View>
   );
 
@@ -90,71 +90,21 @@ export default function Lesson(props) {
     )
   };
 
-  function handlePressButton (lessonId, lessonName) {
-    setModalVisible(true);
-    setLessonId(lessonId);
-    setLessonName(lessonName);
-  }
-
-  function renderLessonTitleGroup (lessonName, lessonId) {
+  function renderLessonTitleGroup (lessonName, lessonId, lessonDocument, lessonVideo) {
     return (
       <View>
         <Text style={styles.lessonName}>{lessonName}</Text>
-
-        <View style={styles.lessonButtonGroup}>
-          <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
-            <TouchableOpacity
-              style={[styles.lessonSubButton, styles.lessonDoneButton]}
-            >
-                <Text>Click for Done</Text>
-            </TouchableOpacity>
-          </HoverableView>
-
-          <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
-            <TouchableOpacity
-              style={[styles.lessonSubButton, styles.lessonDocumentButton, {flexDirection: 'row'}]}
-            >
-              <Text>Document</Text>
-              <AiOutlineRead style={{paddingLeft: 4}}/>
-            </TouchableOpacity>
-          </HoverableView>
-
-          <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
-            <TouchableOpacity
-              style={[styles.lessonSubButton, styles.lessonShowAllButton]}
-              onPress={() => handlePressButton(lessonId, lessonName)}
-            >
-              <Text>Show all</Text>
-            </TouchableOpacity>
-          </HoverableView>
+        <View style={[styles.lessonButtonGroup, styles.flexWrapOnRow]}>
+          {displayDoneLessonButton()}
+          {lessonDocument !== null ? displayDocumentLessonButton(lessonDocument) : null}
+          {lessonVideo !== null ? displayVideoLessonButton(lessonVideo) : null}
+          {displayShowAllLessonButton (lessonId, lessonName)}
         </View>
       </View>
     )
   };
 
-  function renderSpecificLessonModal (lessonId, lessonName) {
-    return (
-      <Modal
-        onRequestClose={() => setModalVisible(false)}
-        visible={modalVisible}
-        animationType={"slide"}
-      >
-        <View style={styles.modalView}>
-          <View>
-            <Text style={styles.lessonTitleModal}>{lessonName}</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeText}>Close [X]</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lessonContentModal}>
-            {renderLessonContent(lessonId)}
-          </View>
-        </View>
-      </Modal>
-    )
-  }
-
-  function renderLessonContent (lessonId) {
+  function renderSubjectItems (lessonId) {
     return (
       <>
         {subjectNames.map((subject, index) => (
@@ -173,8 +123,8 @@ export default function Lesson(props) {
                     source={'/image/happy-girl-writing.jpeg'}
                   />
                   <View style={styles.subjectBottomButtonGroup}>
-                    {subject.done === true ? displayDoneButton() : null}
-                    {subject.document_link !== null ? displayDocumentButton(subject.document_link) : null}
+                    {subject.done === true ? displayDoneSubjectButton() : null}
+                    {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
                   </View>
                 </TouchableOpacity>
               </HoverableView>
@@ -185,7 +135,88 @@ export default function Lesson(props) {
     )
   };
 
-  function displayDoneButton () {
+  function renderSubjectItemsModal (lessonId, lessonName) {
+    return (
+      <Modal
+        onRequestClose={() => setModalVisible(false)}
+        visible={modalVisible}
+        animationType={"slide"}
+      >
+        <View style={styles.modalView}>
+          <View>
+            <Text style={styles.lessonTitleModal}>{lessonName}</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeText}>Close [X]</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.flexWrapOnRow}>
+            {renderSubjectItems(lessonId)}
+          </View>
+        </View>
+      </Modal>
+    )
+  };
+
+  function displayDoneLessonButton () {
+    return (
+      <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
+        <TouchableOpacity
+          style={[styles.lessonSubButton, styles.lessonDoneButton]}
+        >
+            <Text>Click for Done</Text>
+        </TouchableOpacity>
+      </HoverableView>
+    )
+  };
+
+  function displayDocumentLessonButton (lessonDocument) {
+    return (
+      <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
+        <TouchableOpacity
+          style={[styles.lessonSubButton, styles.lessonDocumentButton, {flexDirection: 'row'}]}
+          onPress={() => onShowContent(lessonDocument)}
+        >
+          <Text>Document</Text>
+          <AiOutlineRead style={{paddingLeft: 4}}/>
+        </TouchableOpacity>
+      </HoverableView>
+    )
+  };
+
+  function displayVideoLessonButton (lessonVideo) {
+    return (
+      <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
+        <TouchableOpacity
+          style={[styles.lessonSubButton, styles.lessonDocumentButton, {flexDirection: 'row'}]}
+          onPress={() => onShowContent(lessonVideo)}
+        >
+          <Text>Video</Text>
+          <AiOutlineVideoCamera style={{paddingLeft: 4}}/>
+        </TouchableOpacity>
+      </HoverableView>
+    )
+  };
+
+  function displayShowAllLessonButton (lessonId, lessonName) {
+    return (
+      <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
+        <TouchableOpacity
+          style={[styles.lessonSubButton, styles.lessonShowAllButton]}
+          onPress={() => handlePressShowAllButton(lessonId, lessonName)}
+        >
+          <Text>Show all</Text>
+        </TouchableOpacity>
+      </HoverableView>
+    )
+  };
+
+  function handlePressShowAllButton (lessonId, lessonName) {
+    setModalVisible(true);
+    setLessonId(lessonId);
+    setLessonName(lessonName);
+  };
+
+  function displayDoneSubjectButton () {
     return (
       <TouchableOpacity style={[styles.subjectBottomButton, styles.doneButton]}>
         <Text style={styles.subjectBottomButtonText}>Done</Text>
@@ -193,7 +224,7 @@ export default function Lesson(props) {
     )
   };
 
-  function displayDocumentButton (documentLink) {
+  function displayDocumentSubjectButton (documentLink) {
     return (
       <TouchableOpacity
         style={[styles.subjectBottomButton, styles.showDocButton, {flexDirection: 'row'}]}

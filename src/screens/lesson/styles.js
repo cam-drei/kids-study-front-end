@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   lessonName: {
-    fontSize: 30,
+    fontSize: 25,
     alignSelf: "left",
     marginTop: 10,
     marginLeft: 10,
@@ -119,16 +119,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  lessonContentModal: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
   lessonTitleModal: {
     color: "#000000",
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 25,
     marginTop: 10,
     alignSelf: 'center',
+  },
+  flexWrapOnRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
