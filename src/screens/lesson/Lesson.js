@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-na
 import styles from "./styles";
 import HoverableView from "../../compoments/HoverableView";
 import { useNavigate } from "react-router-dom";
-import { AiFillHome, AiOutlineRead, AiOutlineVideoCamera } from "react-icons/ai";
+import { AiFillHome, AiOutlineRead, AiOutlineVideoCamera, AiOutlineCheck } from "react-icons/ai";
 import { supabase } from "../../supabaseClient";
 import * as _ from 'lodash';
 
@@ -178,10 +178,11 @@ export default function Lesson(props) {
       <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
         {lessonDone === true ?
           <TouchableOpacity
-            style={[styles.lessonSubButton, styles.pressedLessonDoneButton]}
+            style={[styles.lessonSubButton, styles.pressedLessonDoneButton, styles.flexWrapOnRow]}
             onPress={() => updateLessonDoneToFalse(lessonId)}
           >
             <Text style={styles.subjectBottomButtonText}>Done</Text>
+            <AiOutlineCheck style={{color: '#FFFFFF', paddingLeft: 5}}/>
           </TouchableOpacity>
         :
           <TouchableOpacity
@@ -195,10 +196,10 @@ export default function Lesson(props) {
     )
   };
 
-  async function updateLessonDoneToTrue (lessonId) {
+  async function updateLessonDoneToFalse (lessonId) {
     const { data, error } = await supabase
       .from('lessons')
-      .update({ done: true })
+      .update({ done: false })
       .match({ id: lessonId })
 
     if(error) {
@@ -210,10 +211,10 @@ export default function Lesson(props) {
     getLessonItems();
   };
 
-  async function updateLessonDoneToFalse (lessonId) {
+  async function updateLessonDoneToTrue (lessonId) {
     const { data, error } = await supabase
       .from('lessons')
-      .update({ done: false })
+      .update({ done: true })
       .match({ id: lessonId })
 
     if(error) {
