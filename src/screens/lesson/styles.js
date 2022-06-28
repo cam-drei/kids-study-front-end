@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF9900',
     borderColor: '#FF9900',
   },
-  
   lessonDocumentButton: {
     borderColor: '#83b925',
   },

@@ -109,10 +109,10 @@ export default function Lesson(props) {
           {lessonDescription !== null ? <Text style={styles.lessonDescriptionText}>( {lessonDescription} )</Text> : null}
         </View>
         <View style={[styles.lessonButtonGroup, styles.flexWrapOnRow]}>
-          {displayDoneLessonButton(lessonDone)}
+          {displayDoneLessonButton(lessonDone, lessonId)}
           {lessonDocument !== null ? displayDocumentLessonButton(lessonDocument) : null}
           {lessonVideo !== null ? displayVideoLessonButton(lessonVideo) : null}
-          {displayShowAllLessonButton (lessonId, lessonName)}
+          {displayShowAllLessonButton(lessonId, lessonName)}
         </View>
       </View>
     )
@@ -173,24 +173,56 @@ export default function Lesson(props) {
     )
   };
 
-  function displayDoneLessonButton (lessonDone) {
+  function displayDoneLessonButton (lessonDone, lessonId) {
     return (
       <HoverableView onHover={{ backgroundColor: '#D6D6D6' }}>
         {lessonDone === true ?
           <TouchableOpacity
             style={[styles.lessonSubButton, styles.pressedLessonDoneButton]}
+            onPress={() => updateLessonDoneToFalse(lessonId)}
           >
-              <Text style={styles.subjectBottomButtonText}>Done</Text>
+            <Text style={styles.subjectBottomButtonText}>Done</Text>
           </TouchableOpacity>
         :
           <TouchableOpacity
             style={[styles.lessonSubButton, styles.lessonDoneButton]}
+            onPress={() => updateLessonDoneToTrue(lessonId)}
           >
-              <Text>Click for Done</Text>
+            <Text>Click for Done</Text>
           </TouchableOpacity>
         }
       </HoverableView>
     )
+  };
+
+  async function updateLessonDoneToTrue (lessonId) {
+    const { data, error } = await supabase
+      .from('lessons')
+      .update({ done: true })
+      .match({ id: lessonId })
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Lessons not found")
+    }
+    getLessonItems();
+  };
+
+  async function updateLessonDoneToFalse (lessonId) {
+    const { data, error } = await supabase
+      .from('lessons')
+      .update({ done: false })
+      .match({ id: lessonId })
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Lessons not found")
+    }
+    getLessonItems();
   };
 
   function displayDocumentLessonButton (lessonDocument) {
