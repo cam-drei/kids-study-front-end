@@ -45,7 +45,7 @@ export default function Lesson(props) {
     const { data, error } = await supabase
       .from('lessons')
       .select('*, courses!inner(*)')
-      .filter('courses.id', 'in', `(${props.courseId})`)
+      .filter('courses.id', 'eq', `${props.courseId}`)
 
     if(error) {
       throw new Error(error.message)
