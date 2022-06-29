@@ -39,7 +39,7 @@ export default function Lesson(props) {
   
   useEffect(() => {
     getSubjectItems();
-  }, []);
+  });
 
   const getLessonItems = async () => {
     const { data, error } = await supabase
@@ -58,7 +58,7 @@ export default function Lesson(props) {
 
   useEffect(() => {
     getLessonItems();
-  }, []);
+  });
 
   return (
     <View style={styles.container}>
@@ -133,10 +133,11 @@ export default function Lesson(props) {
                 <TouchableOpacity style={styles.subjectDiscription}>
                   <Text style={styles.subjectName}>{subject.name}</Text>
                 </TouchableOpacity>
-                <Image
-                  style={styles.image}
-                  source={'/image/happy-girl-writing.jpeg'}
-                />
+                {subject.video_link !== null ?
+                  <Image style={styles.image} source={'/image/happy-girl-writing.jpeg'} />
+                :
+                  <Image style={styles.image} source={'/image/no-video.png'} />
+                }
                 <View style={styles.subjectBottomButtonGroup}>
                   {displayDoneSubjectButton(subject.done, subject.id)}
                   {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}

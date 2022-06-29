@@ -32,20 +32,18 @@ const styles = StyleSheet.create({
   image: {
     height: 80,
     width: 140,
+    alignSelf: 'center',
   },
   subjectGroup: {
     width: 150,
     height: 150,
     borderColor: "#83b925",
     borderWidth: 1,
-    alignItems: 'center',
     margin: 5,
   },
   subjectDiscription: {
-    flexDirection: "row",
-    alignItems: 'center',
-    justifyContent: "space-evenly",
     height: 40,
+    marginHorizontal: 3,
   },
   subjectName: {
     fontSize: 15,
@@ -66,6 +64,7 @@ const styles = StyleSheet.create({
   },
   subjectDoneButton: {
     borderWidth: 1.5,
+    backgroundColor: '#FFFFFF',
   },
   doneButton: {
     borderColor: '#FF9900',
@@ -83,6 +82,7 @@ const styles = StyleSheet.create({
     width: 146,
     bottom: 1,
     position: "absolute",
+    // backgroundColor: '#FFFFFF',
   },
   lessonButtonGroup: {
     flex: 1,

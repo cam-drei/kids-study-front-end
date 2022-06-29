@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     getCourseItems();
-  }, []);
+  });
 
   return (
     <BrowserRouter>
