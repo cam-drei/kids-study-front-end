@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     width: 146,
     bottom: 1,
     position: "absolute",
-    // backgroundColor: '#FFFFFF',
   },
   lessonButtonGroup: {
     flex: 1,
