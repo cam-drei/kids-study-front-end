@@ -138,7 +138,7 @@ export default function Lesson(props) {
                   source={'/image/happy-girl-writing.jpeg'}
                 />
                 <View style={styles.subjectBottomButtonGroup}>
-                  {subject.done === true ? displayDoneSubjectButton() : null}
+                  {displayDoneSubjectButton(subject.done, subject.id)}
                   {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
                 </View>
               </TouchableOpacity>
@@ -273,12 +273,56 @@ export default function Lesson(props) {
     setLessonName(lessonName);
   };
 
-  function displayDoneSubjectButton () {
+  function displayDoneSubjectButton (subjectDone, subjectId) {
     return (
-      <TouchableOpacity style={[styles.subjectBottomButton, styles.doneButton]}>
-        <Text style={styles.subjectBottomButtonText}>Done</Text>
-      </TouchableOpacity>
+      <>
+        {subjectDone === true ?
+          <TouchableOpacity 
+            style={[styles.subjectBottomButton, styles.pressedDoneButton]}
+            onPress={() => updateSubjectDoneToFalse(subjectId)}
+          >
+            <AiOutlineCheck style={{color: '#FFFFFF'}}/>
+          </TouchableOpacity>
+        :
+          <TouchableOpacity 
+            style={[styles.subjectBottomButton, styles.subjectDoneButton, styles.doneButton]}
+            onPress={() => updateSubjectDoneToTrue(subjectId)}
+          >
+            <Text>Done</Text>
+          </TouchableOpacity>
+        }
+      </>
     )
+  };
+
+  async function updateSubjectDoneToFalse (subjectId) {
+    const { data, error } = await supabase
+      .from('subjects')
+      .update({ done: false })
+      .match({ id: subjectId })
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Subjects not found")
+    }
+    getSubjectItems();
+  };
+
+  async function updateSubjectDoneToTrue (subjectId) {
+    const { data, error } = await supabase
+      .from('subjects')
+      .update({ done: true })
+      .match({ id: subjectId })
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Subjects not found")
+    }
+    getSubjectItems();
   };
 
   function displayDocumentSubjectButton (documentLink) {

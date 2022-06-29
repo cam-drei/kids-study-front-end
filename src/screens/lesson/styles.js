@@ -56,12 +56,19 @@ const styles = StyleSheet.create({
   subjectBottomButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
+    borderRadius: 15,
     height: 24,
     margin: 1,
   },
-  doneButton: {
+  pressedDoneButton: {
     backgroundColor: "#FF9900",
+    flex: 1,
+  },
+  subjectDoneButton: {
+    borderWidth: 1.5,
+  },
+  doneButton: {
+    borderColor: '#FF9900',
     flex: 1,
   },
   showDocButton: {
