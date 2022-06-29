@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     margin: 3,
     borderWidth: 1.5,
+    backgroundColor: '#FFFFFF',
   },
   lessonDoneButton: {
     borderColor: '#FF9900',
