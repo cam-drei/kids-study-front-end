@@ -25,7 +25,7 @@ export default function Course() {
 
   useEffect(() => {
    getCourseItems();
-  }, []);
+  });
     
   return (
     <View style={styles.container}>
