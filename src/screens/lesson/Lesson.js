@@ -63,7 +63,7 @@ export default function Lesson(props) {
   return (
     <View style={styles.container}>
       {renderHeader(props.courseName)}
-      {renderSortedLessonItems()}
+      {renderSortedLessonItems(lessonItems)}
       {renderSubjectItemsModal(lessonId, lessonName)}
     </View>
   );
@@ -80,9 +80,9 @@ export default function Lesson(props) {
     )
   };
 
-  function renderSortedLessonItems () {
+  function renderSortedLessonItems (originLessonItems) {
     const sortedLessonItems = _
-      .chain(lessonItems)
+      .chain(originLessonItems)
       .sortBy('name')
       .map((lesson, index) => (
         <View key={index}>
