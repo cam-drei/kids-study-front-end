@@ -26,7 +26,12 @@ export default function Lesson(props) {
   const getSubjectItems = async () => {
     const { data, error } = await supabase
       .from('subjects')
-      .select('*, lessons!inner(*)')
+      .select(`
+        *,
+        lessons:lesson_id ( * ),
+        courses:course_id ( * )
+      `)
+      .filter('courses.id', 'eq', `${props.courseId}`)
 
     if(error) {
       throw new Error(error.message)
