@@ -3,6 +3,7 @@ import Course from './screens/course/Course';
 import Lesson from './screens/lesson/Lesson';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { supabase } from './supabaseClient';
+import { slugify } from './compoments/Slugify';
 
 function App() {
   const [courseItems, setCourseItems] = useState([]);
@@ -32,7 +33,7 @@ function App() {
         {courseItems.map((course, index) => (
           <Route 
             key={index} 
-            path={`/${course.name}/lesson/`} 
+            path={`/${slugify(course.name)}/lesson/`} 
             element={<Lesson courseId={course.id} courseName={course.name}/>}
           />
         ))}

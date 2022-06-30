@@ -5,6 +5,7 @@ import HoverableView from "../../compoments/HoverableView";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
 import * as _ from 'lodash';
+import { slugify } from "../../compoments/Slugify";
 
 export default function Course() {
   const [courseItems, setCourseItems] = useState([]);
@@ -26,7 +27,7 @@ export default function Course() {
   useEffect(() => {
    getCourseItems();
   });
-    
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
@@ -44,7 +45,7 @@ export default function Course() {
             style={styles.course}
             onHover={{ backgroundColor: '#F8F6E9' }}
           >
-          <Link to={`/${course.name}/lesson`}>
+          <Link to={`/${slugify(course.name)}/lesson`}>
             <TouchableOpacity>
               <Image
                 style={styles.image}
