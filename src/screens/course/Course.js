@@ -31,13 +31,13 @@ export default function Course() {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Study Courses</Text>
-      {renderSortedCourseItems()}
+      {renderSortedCourseItems(courseItems)}
     </View>
   );
 
-  function renderSortedCourseItems () {
+  function renderSortedCourseItems (originCourseItems) {
     const sortedCourseItems = _
-      .chain(courseItems)
+      .chain(originCourseItems)
       .sortBy('name')
       .map((course, index) => (
         <View key={index}>
