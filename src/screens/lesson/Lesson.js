@@ -127,29 +127,28 @@ export default function Lesson(props) {
     const sortedSubjectItems = _
       .chain(subjectItems)
       .sortBy('name')
+      .filter({lesson_id: lessonId})
       .map((subject, index) => (
         <View key={index}>
-          {lessonId === subject.lesson_id ?
-            <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
-              <TouchableOpacity
-                style={styles.subjectGroup}
-                onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
-              >
-                <TouchableOpacity style={styles.subjectDiscription}>
-                  <Text style={styles.subjectName}>{subject.name}</Text>
-                </TouchableOpacity>
-                {subject.video_link !== null ?
-                  <Image style={styles.image} source={'/image/happy-girl-writing.jpeg'} />
-                :
-                  <Image style={styles.image} source={'/image/no-video.png'} />
-                }
-                <View style={styles.subjectBottomButtonGroup}>
-                  {displayDoneSubjectButton(subject.done, subject.id)}
-                  {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
-                </View>
+          <HoverableView onHover={{ backgroundColor: '#EAF8E9' }}>
+            <TouchableOpacity
+              style={styles.subjectGroup}
+              onPress={() => subject.video_link !== null ? onShowContent(subject.video_link) : null}
+            >
+              <TouchableOpacity style={styles.subjectDiscription}>
+                <Text style={styles.subjectName}>{subject.name}</Text>
               </TouchableOpacity>
-            </HoverableView>
-          : null}
+              {subject.video_link !== null ?
+                <Image style={styles.image} source={'/image/happy-girl-writing.jpeg'} />
+              :
+                <Image style={styles.image} source={'/image/no-video.png'} />
+              }
+              <View style={styles.subjectBottomButtonGroup}>
+                {displayDoneSubjectButton(subject.done, subject.id)}
+                {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
+              </View>
+            </TouchableOpacity>
+          </HoverableView>
         </View>
       ))
       .value();
