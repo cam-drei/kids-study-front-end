@@ -44,7 +44,8 @@ export default function Lesson(props) {
   
   useEffect(() => {
     getSubjectItems();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getLessonItems = async () => {
     const { data, error } = await supabase
@@ -63,7 +64,8 @@ export default function Lesson(props) {
 
   useEffect(() => {
     getLessonItems();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={styles.container}>
