@@ -142,9 +142,7 @@ export default function Lesson(props) {
               </TouchableOpacity>
               {subject.video_link !== null ?
                 <Image style={styles.image} source={'/image/happy-girl-writing.jpeg'} />
-              :
-                <Image style={styles.image} source={'/image/no-video.png'} />
-              }
+              : null}
               <View style={styles.subjectBottomButtonGroup}>
                 {displayDoneSubjectButton(subject.done, subject.id)}
                 {subject.document_link !== null ? displayDocumentSubjectButton(subject.document_link) : null}
