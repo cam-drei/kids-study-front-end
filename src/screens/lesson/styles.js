@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   },
   lessonContent: {
     width: "98%",
-    height: 170,
     borderColor: "#83b925",
     borderWidth: 1,
     alignSelf: 'center',
