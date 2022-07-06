@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import Course from './screens/course/Course';
+import Lesson from './screens/lesson/Lesson';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { supabase } from './supabaseClient';
+import { slugify } from './compoments/Slugify';
 
 function App() {
+  const [courseItems, setCourseItems] = useState([]);
+
+  const getCourseItems = async () => {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('name, id')
+
+    if(error) {
+      throw new Error(error.message)
+    }
+    if(!data) {
+      throw new Error("Course not found")
+    }
+    setCourseItems(data);
+  };
+
+  useEffect(() => {
+    getCourseItems();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Course />} />
+        {courseItems.map((course, index) => (
+          <Route 
+            key={index} 
+            path={`/${slugify(course.name)}/lesson/`} 
+            element={<Lesson courseId={course.id} courseName={course.name}/>}
+          />
+        ))}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
